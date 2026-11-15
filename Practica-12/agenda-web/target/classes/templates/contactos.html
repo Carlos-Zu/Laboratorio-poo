@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Agenda de Contactos</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a2e;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .caja {
+            max-width: 900px;
+            margin: auto;
+            background: #16213e;
+            padding: 30px;
+            border-radius: 12px;
+            border: 1px solid #4a90d9;
+        }
+
+        h1 {
+            color: #f0c040;
+            text-align: center;
+        }
+
+        .nuevo {
+            display: inline-block;
+            background: #4a90d9;
+            color: white;
+            padding: 12px 18px;
+            border-radius: 6px;
+            text-decoration: none;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 12px;
+            border: 1px solid #4a90d9;
+            text-align: left;
+        }
+
+        th {
+            background: #0f3460;
+            color: #f0c040;
+        }
+
+        tr:nth-child(even) {
+            background: #1a1a2e;
+        }
+
+        .vacio {
+            text-align: center;
+            padding: 20px;
+            color: #f0c040;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="caja">
+
+        <h1>Agenda de Contactos</h1>
+
+        <a class="nuevo" th:href="@{/nuevo}">
+            + Nuevo contacto
+        </a>
+
+        <p class="vacio" th:if="${#lists.isEmpty(contactos)}">
+            No hay contactos registrados todavía.
+        </p>
+
+        <table th:unless="${#lists.isEmpty(contactos)}">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Email</th>
+                    <th>Teléfono</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr th:each="c : ${contactos}">
+                    <td th:text="${c.nombre}">-</td>
+                    <td th:text="${c.apellido}">-</td>
+                    <td th:text="${c.email}">-</td>
+                    <td th:text="${c.telefono}">-</td>>
+                    <td>
+                        <a th:href="@{/editar/{id}(id=${c.id})}">
+                            Editar
+                        </a>
+                        
+                        <form th:action="@{/eliminar/{id}(id=${c.id})}"
+                        method="post"
+                        style="display:inline;"
+                        onsubmit="return confirm('¿Seguro que deseas eliminar este contacto?');">
+                        <button type="submit">Eliminar</button>
+                    </form>
+                </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</body>
+</html>

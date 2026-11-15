@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Producto</title>
+    <style>
+        body  { font-family: Arial, sans-serif; background: #1a1a2e;
+                color: #e0e0e0; display: flex; justify-content: center;
+                margin-top: 60px; }
+        .caja { background: #16213e; padding: 40px; border-radius: 12px;
+                border: 1px solid #4a90d9; width: 380px; }
+        h1    { color: #f0c040; text-align: center; margin-bottom: 24px; }
+        label { display: block; margin-bottom: 4px; color: #aaa; font-size: .9em; }
+        input { width: 100%; padding: 10px; margin-bottom: 16px;
+                background: #0f3460; border: 1px solid #4a90d9;
+                border-radius: 6px; color: #fff; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; background: #4a90d9;
+                 border: none; border-radius: 6px; color: white;
+                 font-size: 1em; cursor: pointer; }
+        a     { display: block; text-align: center; margin-top: 16px; color: #4a90d9; }
+    </style>
+</head>
+<body>
+    <div class="caja">
+        <h1 th:text="${producto.id} != null ? '✏️ Editar Producto' : '📦 Nuevo Producto'">
+            Producto
+        </h1>
+
+        <form th:action="${producto.id} != null ? @{/actualizar} : @{/guardar}"
+              th:object="${producto}"
+              method="post">
+
+            <!-- Campo oculto: necesario para que el UPDATE sepa qué ID modificar -->
+            <input type="hidden" th:field="*{id}" />
+
+            <label>Nombre</label>
+            <input type="text" th:field="*{nombre}" placeholder="Nombre del producto" required />
+
+            <label>Categoría</label>
+            <input type="text" th:field="*{categoria}" placeholder="Categoría" required />
+
+            <label>Precio</label>
+            <input type="number" th:field="*{precio}" step="0.01" min="0" placeholder="0.00" required />
+
+            <label>Stock</label>
+            <input type="number" th:field="*{stock}" min="0" placeholder="0" required />
+
+            <button type="submit">💾 Guardar</button>
+        </form>
+        <a href="/productos">← Cancelar</a>
+    </div>
+</body>
+</html>

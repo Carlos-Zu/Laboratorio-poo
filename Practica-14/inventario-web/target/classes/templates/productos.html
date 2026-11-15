@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Inventario de Productos</title>
+    <style>
+        body  { font-family: Arial, sans-serif; background: #1a1a2e;
+                color: #e0e0e0; padding: 40px; }
+        h1    { color: #f0c040; }
+        a.btn { display: inline-block; padding: 10px 20px; background: #4a90d9;
+                color: white; border-radius: 6px; text-decoration: none;
+                margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; }
+        th    { background: #0f3460; color: #4a90d9; padding: 12px; text-align: left; }
+        td    { padding: 10px; border-bottom: 1px solid #333; }
+        tr:hover { background: #16213e; }
+        a.editar   { color: #4a90d9; text-decoration: none; margin-right: 12px; }
+        a.eliminar { color: #e05252; text-decoration: none; }
+        .bajo  { color: #e05252; font-weight: bold; }
+        .vacio { color: #aaa; font-style: italic; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>📦 Inventario de Productos</h1>
+    <a class="btn" href="/nuevo">+ Nuevo producto</a>
+
+    <div th:if="${#lists.isEmpty(productos)}" class="vacio">
+        No hay productos aún.
+    </div>
+
+    <table th:unless="${#lists.isEmpty(productos)}">
+        <tr>
+            <th>Nombre</th>
+            <th>Categoría</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Acciones</th>
+        </tr>
+        <tr th:each="p : ${productos}">
+            <td th:text="${p.nombre}">-</td>
+            <td th:text="${p.categoria}">-</td>
+            <td th:text="'$' + ${#numbers.formatDecimal(p.precio, 1, 'COMMA', 2, 'POINT')}">-</td>
+            <!-- Stock en rojo si quedan menos de 5 unidades -->
+            <td th:text="${p.stock}" th:classappend="${p.stock lt 5} ? 'bajo'">-</td>
+            <td>
+                <a class="editar"   th:href="@{/editar/{id}(id=${p.id})}">Editar</a>
+                <a class="eliminar" th:href="@{/eliminar/{id}(id=${p.id})}"
+                   onclick="return confirm('¿Eliminar este producto?')">Eliminar</a>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
